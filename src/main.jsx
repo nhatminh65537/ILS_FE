@@ -13,6 +13,7 @@ import LessonView from "./pages/Learn/Lesson/LessonView.jsx";
 import ModuleView from "./pages/Learn/Module/ModuleView.jsx";
 import { initializeUserData } from "./store/myUserSlice";
 import { useLayoutEffect } from "react";
+import Profile from "./pages/Profile/Profile.jsx";
 
 // Wrapper component to initialize user data if authenticated
 const AppWithAuth = () => {
@@ -71,7 +72,7 @@ const AppWithAuth = () => {
                         />
                         <Route
                             path="profile"
-                            element={<div>Profile Page</div>}
+                            element={<Profile />}
                         />
                         <Route path="learn/:moduleId" element={<ModuleView />} />
                     </Route>

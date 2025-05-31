@@ -4,6 +4,7 @@ import { logoutUser } from "../../store/authSlice";
 
 const Header = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const avatar = useSelector((state) => state.myUser.profile?.avatarPath);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -71,7 +72,7 @@ const Header = () => {
                                 <div className="w-10 rounded-full">
                                     <img
                                         alt="Tailwind CSS Navbar component"
-                                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                                        src= { avatar || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
                                     />
                                 </div>
                             </div>
@@ -80,10 +81,10 @@ const Header = () => {
                                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                             >
                                 <li>
-                                    <a className="justify-between">
+                                    <NavLink to="/profile" className="justify-between">
                                         Profile
                                         <span className="badge">New</span>
-                                    </a>
+                                    </NavLink>
                                 </li>
                                 <li>
                                     <a>Settings</a>

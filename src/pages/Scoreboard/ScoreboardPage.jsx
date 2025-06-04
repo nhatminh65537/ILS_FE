@@ -67,7 +67,7 @@ const ScoreboardPage = () => {
                     <div className="avatar">
                       <div className="mask mask-squircle w-12 h-12">
                         <img 
-                          src={user.avatarPath || "/default-avatar.png"} 
+                          src={user.avatarPath || "avatar.png"} 
                           alt={`${user.userName}'s avatar`} 
                         />
                       </div>

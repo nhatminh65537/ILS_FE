@@ -10,6 +10,10 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+ARG VITE_API_HOST
+RUN touch .env
+RUN echo "VITE_API_HOST=${VITE_API_HOST}" > .env
+
 # Copy the rest of the code
 COPY . .
 

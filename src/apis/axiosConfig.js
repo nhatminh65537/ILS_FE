@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 var host = import.meta.env.API_HOST || "localhost:7185"; // Default to localhost:7185 if API_HOST is not set
+console.log("API_HOST:", import.meta.env);
 var url = `http://${host}/api`;
 
 const apiClient = axios.create({

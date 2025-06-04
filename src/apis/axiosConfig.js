@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 var test_url = 'https://localhost:7185/api'
+var prod_url = 'https://ils.rougitsune.top/api';
 
 const apiClient = axios.create({
   baseURL: test_url,

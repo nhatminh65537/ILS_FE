@@ -9,7 +9,7 @@ const Home = () => {
       {/* Hero Section */}
       <div className="hero min-h-[70vh] bg-base-200"
         style={{
-          backgroundImage: 'url(public/image.png)',
+          backgroundImage: 'url(image.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}>

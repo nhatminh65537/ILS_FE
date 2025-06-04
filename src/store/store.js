@@ -4,6 +4,7 @@ import modulesReducer from './modulesSlice';
 import myUserReducer from './myUserSlice';
 import contentEditReducer from './contentEditSlice';
 import lessonTypesReducer from './lessonTypesSlice';
+import challengeReducer from './challengeSlice';
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         myUser: myUserReducer,
         contentEdit: contentEditReducer,
         lessonTypes: lessonTypesReducer,
+        challenge: challengeReducer,
     },
 });
 

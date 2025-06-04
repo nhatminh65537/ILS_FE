@@ -14,6 +14,7 @@ import ModuleView from "./pages/Learn/Module/ModuleView.jsx";
 import { initializeUserData } from "./store/myUserSlice";
 import { useLayoutEffect } from "react";
 import Profile from "./pages/Profile/Profile.jsx";
+import ChallengesPage from "./pages/Challenges/ChallengesPage.jsx";
 
 // Wrapper component to initialize user data if authenticated
 const AppWithAuth = () => {
@@ -63,8 +64,8 @@ const AppWithAuth = () => {
                             element={<Learn />}
                         />
                         <Route
-                            path="challenge"
-                            element={<div>Challenge Page</div>}
+                            path="challenge/*"
+                            element={<ChallengesPage />}
                         />
                         <Route
                             path="scoreboard"

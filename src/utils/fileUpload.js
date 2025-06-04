@@ -55,6 +55,55 @@ export const uploadImageFile = async (file, username = 'user') => {
 };
 
 /**
+ * Uploads a challenge file (not avatar) and returns the file DTO
+ * @param {File} file - The file to upload
+ * @param {number} challengeId - The challenge/problem id
+ * @param {string} [fileName] - Optional custom file name
+ * @returns {Promise<{fileName: string, filePath: string, challengeId: number}>}
+ */
+export const uploadChallengeFile = async (file, fileName) => {
+  if (!file) throw new Error('No file selected');
+  const formData = new FormData();
+  // formData.append('file', file);
+  // formData.append('challengeId', challengeId);
+  // if (fileName) formData.append('fileName', fileName);
+
+  // // You may need to adjust the endpoint for your backend file upload
+  // const response = await fetch(`/api/v1/challengeproblems/${challengeId}/file`, {
+  //   method: 'POST',
+  //   body: formData,
+  // });
+  // if (!response.ok) throw new Error('Failed to upload file');
+  // return await response.json();
+
+  // upload the file to the CDN
+
+  formData.append('file', file);
+
+  const response = await fetch(`http://cdn.rougitsune.top/uploads/challenges/${fileName}`, {
+    method: 'POST',
+    body: formData,
+  });
+  return (await response.json()).url;
+};
+
+export const deleteChallengeFile = async (url) => {
+  // You may need to adjust the endpoint for your backend file deletion
+  // const response = await fetch(`/api/v1/challengeproblems/${challengeId}/file/${fileId}`, {
+  //   method: 'DELETE',
+  // });
+  // if (!response.ok) throw new Error('Failed to delete file');
+  // return await response.json();
+
+  // delete the file from the CDN
+  const response = await fetch(url, {
+    method: 'DELETE',
+  });
+
+  return await response.json();
+};
+
+/**
  * Converts a clipboard paste event to a file
  */
 export const getImageFileFromClipboard = async (clipboardEvent) => {

@@ -19,6 +19,44 @@ export const PERMISSIONS = {
         Update: "LearnCategories.Update",
         Delete: "LearnCategories.Delete",
     },
+    
+    ChallengeCategory: {
+        GetAll: "ChallengeCategory.GetAll",
+        Get: "ChallengeCategory.Get",
+        Create: "ChallengeCategory.Create",
+        Update: "ChallengeCategory.Update",
+        Delete: "ChallengeCategory.Delete",
+    },
+    
+    ChallengeNode: {
+        GetPaginated: "ChallengeNode.GetPaginated",
+        Create: "ChallengeNode.Create",
+        Get: "ChallengeNode.Get",
+        Update: "ChallengeNode.Update",
+        Delete: "ChallengeNode.Delete",
+    },
+    
+    ChallengeProblem: {
+        GetAll: "ChallengeProblem.GetAll",
+        Get: "ChallengeProblem.Get",
+        Create: "ChallengeProblem.Create",
+        Update: "ChallengeProblem.Update",
+        Delete: "ChallengeProblem.Delete",
+    },
+    
+    ChallengeState: {
+        GetAll: "ChallengeState.GetAll",
+        Get: "ChallengeState.Get",
+        Update: "ChallengeState.Update",
+    },
+    
+    ChallengeTag: {
+        GetAll: "ChallengeTag.GetAll",
+        Get: "ChallengeTag.Get",
+        Create: "ChallengeTag.Create",
+        Update: "ChallengeTag.Update",
+        Delete: "ChallengeTag.Delete",
+    },
 
     Lessons: {
         GetAll: "LearnLessons.GetAll",
@@ -64,6 +102,10 @@ export const PERMISSIONS = {
         GetPermissions: "MyUser.GetPermissions",
         GetRoles: "MyUser.GetRoles",
         GetProfile: "MyUser.GetProfile",
+        GetModuleProgress: "MyUser.GetModuleProgress",
+        UpdateLearnModuleProgress: "MyUser.UpdateLearnModuleProgress",
+        UpdateLearnLessonFinish: "MyUser.UpdateLearnLessonFinish",
+        GetLessonFinish: "MyUser.GetLessonFinish",
     },
 
     Permissions: {

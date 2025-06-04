@@ -57,7 +57,7 @@ export const updateUserData = createAsyncThunk(
       const updatedData = await myUserAPI.updateUser(userData);
       // Optionally wait for a short time to simulate API delay
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       await dispatch(fetchUserData());
 
       return updatedData;

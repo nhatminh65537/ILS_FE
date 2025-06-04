@@ -25,6 +25,7 @@ FROM nginx:alpine
 
 # Copy built assets from the build stage
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy nginx configuration if needed
 # COPY nginx.conf /etc/nginx/conf.d/default.conf

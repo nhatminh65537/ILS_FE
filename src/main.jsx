@@ -15,6 +15,8 @@ import { initializeUserData } from "./store/myUserSlice";
 import { useLayoutEffect } from "react";
 import Profile from "./pages/Profile/Profile.jsx";
 import ChallengesPage from "./pages/Challenges/ChallengesPage.jsx";
+import ScoreboardPage from "./pages/Scoreboard/ScoreboardPage.jsx";
+import Home from "./pages/Home/Home.jsx";
 
 // Wrapper component to initialize user data if authenticated
 const AppWithAuth = () => {
@@ -55,7 +57,7 @@ const AppWithAuth = () => {
                     </Route>
 
                     {/* Home page - accessible to all */}
-                    <Route index element={<div>Home Page</div>} />
+                    <Route index element={<Home />} />
 
                     {/* Protected routes (redirect to login if not authenticated) */}
                     <Route element={<PrivateRoute />}>
@@ -69,7 +71,7 @@ const AppWithAuth = () => {
                         />
                         <Route
                             path="scoreboard"
-                            element={<div>Scoreboard Page</div>}
+                            element={<ScoreboardPage />}
                         />
                         <Route
                             path="profile"

@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchChallengeProblem } from '../../../store/challengeSlice';
+import { fetchChallengeProblem, checkFlag } from '../../../store/challengeSlice';
 
 const ChallengeModal = ({ challengeId, onClose }) => {
   const dispatch = useDispatch();
   const { currentProblem, loadingProblem } = useSelector(state => state.challenge);
   const [flagInput, setFlagInput] = useState('');
   const [submission, setSubmission] = useState(null);
-  
-//   useEffect(() => {
-//     if (challengeId) {
-//       dispatch(fetchChallengeProblem(challengeId));
-//     }
-//   }, [challengeId, dispatch]);
 
-  const handleSubmitFlag = (e) => {
+  // useEffect(() => {
+  //   if (challengeId) {
+  //     dispatch(fetchChallengeProblem(challengeId));
+  //   }
+  // }, [challengeId, dispatch]);
+
+  const handleSubmitFlag = async (e) => {
     e.preventDefault();
-    
-    // Here you would validate the flag against the correct one
-    if (currentProblem && flagInput === currentProblem.flag) {
-      setSubmission({ correct: true, message: 'Correct flag! Challenge completed.' });
-      // You would also make an API call to mark the challenge as completed
-    } else {
-      setSubmission({ correct: false, message: 'Incorrect flag. Try again!' });
+    if (!flagInput.trim()) return;
+    try {
+      const result = await dispatch(checkFlag({ challengeId: currentProblem.id, flag: flagInput })).unwrap();
+      setSubmission({
+        correct: !!result.isCorrect,
+        message: result.isCorrect ? 'Correct flag! Challenge completed.' : 'Incorrect flag. Try again!'
+      });
+      setFlagInput('');
+    } catch (err) {
+      setSubmission({ correct: false, message: 'Error submitting flag.' });
     }
   };
 
@@ -63,6 +66,9 @@ const ChallengeModal = ({ challengeId, onClose }) => {
           {currentProblem.tags?.map(tag => (
             <div key={tag.id} className="badge badge-outline">{tag.name}</div>
           ))}
+          {currentProblem.isSolved && (
+            <div className="badge badge-success ml-2">Solved</div>
+          )}
         </div>
         
         <div className="prose max-w-none mb-6">
@@ -89,25 +95,27 @@ const ChallengeModal = ({ challengeId, onClose }) => {
           </div>
         )}
         
-        <form onSubmit={handleSubmitFlag}>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Submit flag:</span>
-            </label>
-            <div className="join w-full">
-              <input 
-                type="text" 
-                placeholder="Enter flag here..." 
-                className="input input-bordered join-item w-full" 
-                value={flagInput}
-                onChange={(e) => setFlagInput(e.target.value)}
-              />
-              <button type="submit" className="btn btn-primary join-item">
-                Submit
-              </button>
+        {!currentProblem.isSolved && (
+          <form onSubmit={handleSubmitFlag}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold">Submit flag:</span>
+              </label>
+              <div className="join w-full">
+                <input 
+                  type="text" 
+                  placeholder="Enter flag here..." 
+                  className="input input-bordered join-item w-full" 
+                  value={flagInput}
+                  onChange={(e) => setFlagInput(e.target.value)}
+                />
+                <button type="submit" className="btn btn-primary join-item">
+                  Submit
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        )}
         
         {submission && (
           <div className={`alert ${submission.correct ? 'alert-success' : 'alert-error'} mt-4`}>

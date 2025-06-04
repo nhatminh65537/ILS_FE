@@ -4,6 +4,7 @@ import { challengeCategoriesAPI } from '../apis/challengeCategories';
 import { challengeTagsAPI } from '../apis/challengeTags';
 import { challengeStatesAPI } from '../apis/challengeStates';
 import { challengeProblemsAPI } from '../apis/challengeProblems';
+import { checkFlagAPI } from '../apis/checkFlag';
 
 // Initial state
 const initialState = {
@@ -299,6 +300,18 @@ export const deleteChallengeProblem = createAsyncThunk(
     }
 );
 
+export const checkFlag = createAsyncThunk(
+  'challenge/checkFlag',
+  async ({ challengeId, flag }, { rejectWithValue }) => {
+    try {
+      const result = await checkFlagAPI.check({ challengeId, flag });
+      return { challengeId, ...result };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 // Create the challenge slice
 const challengeSlice = createSlice({
   name: 'challenge',
@@ -465,6 +478,28 @@ const challengeSlice = createSlice({
         state.categories = state.categories.filter(cat => cat.id !== action.payload);
         // Also remove from filters if selected
         state.filters.categoryIds = state.filters.categoryIds.filter(id => id !== action.payload);
+      })
+      .addCase(checkFlag.fulfilled, (state, action) => {
+        // action.payload: { challengeId, isCorrect, ... }
+        // Set isSolved on the currentProblem if it matches
+        if (
+          state.currentProblem &&
+          (state.currentProblem.id === action.payload.challengeId)
+        ) {
+          state.currentProblem.isSolved = !!action.payload.isCorrect;
+        }
+        // Also update in problems list if present
+        state.problems = state.problems.map(p => {
+          if (
+            (p.problem?.id === action.payload.challengeId)
+          ) {
+            return {
+              ...p,
+              problem: { ...p.problem, isSolved: !!action.payload.isCorrect }
+            };
+          }
+          return p;
+        });
       });
       
   }

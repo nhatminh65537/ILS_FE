@@ -49,6 +49,11 @@ const ChallengeCard = ({
               </svg>
             )}
             <h2 className="card-title text-base">{item.title}</h2>
+            {!isFolder && item.isSolved && (
+              <span className="ml-2 badge badge-success" title="Solved">
+                ✔
+              </span>
+            )}
           </div>
           
           <div className="flex gap-1">

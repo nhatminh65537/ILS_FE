@@ -9,7 +9,7 @@ export const PERMISSIONS = {
         Login: "Auth.Login",
         Register: "Auth.Register",
         Logout: "Auth.Logout",
-        ResetPassword: "Auth.ResetPassword",
+        ChangePassword: "Auth.ChangePassword",
     },
 
     Categories: {
@@ -42,6 +42,8 @@ export const PERMISSIONS = {
         Create: "ChallengeProblem.Create",
         Update: "ChallengeProblem.Update",
         Delete: "ChallengeProblem.Delete",
+        UploadFile: "ChallengeProblem.UploadFile",
+        UpdateFile: "ChallengeProblem.UpdateFile",
     },
     
     ChallengeState: {
@@ -56,6 +58,10 @@ export const PERMISSIONS = {
         Create: "ChallengeTag.Create",
         Update: "ChallengeTag.Update",
         Delete: "ChallengeTag.Delete",
+    },
+    
+    CheckFlag: {
+        CheckFlag: "CheckFlag.CheckFlag",
     },
 
     Lessons: {
@@ -141,6 +147,8 @@ export const PERMISSIONS = {
 
     Users: {
         GetAll: "Users.GetAll",
+        GetByUsername: "Users.GetByUsername",
+        GetByEmail: "Users.GetByEmail",
         Get: "Users.Get",
         Create: "Users.Create",
         Update: "Users.Update",
@@ -152,5 +160,6 @@ export const PERMISSIONS = {
         GetRoles: "Users.GetRoles",
         AddRole: "Users.AddRole",
         RemoveRole: "Users.RemoveRole",
+        GetUserScoreboard: "Users.GetUserScoreboard",
     },
 };

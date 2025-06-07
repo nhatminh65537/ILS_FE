@@ -33,7 +33,7 @@ const ChallengeCard = ({
 
   return (
     <div 
-      className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+      className="card border border-gray-400 shadow-md bg-base-100 hover:shadow-lg transition-shadow cursor-pointer"
       onClick={handleClick}
     >
       <div className="card-body p-4">

@@ -158,7 +158,7 @@ const ChallengeFilterPanel = ({
   };
 
   return (
-    <div className="p-4 bg-base-200 rounded-box">
+    <div className="p-4 bg-base-100 shadow-lg rounded-box">
       <h3 className="text-lg font-semibold mb-4">Filter Challenges</h3>
       
       {/* Search */}

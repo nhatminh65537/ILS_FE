@@ -451,7 +451,7 @@ const ChallengesPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 bg-base-200 rounded-box">
+              <div className="text-center py-6 bg-base-200 rounded-box border border-gray-400 shadow-md">
                 {loadingFolders ? (
                   <span>Loading folders...</span>
                 ) : (
@@ -494,7 +494,7 @@ const ChallengesPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 bg-base-200 rounded-box">
+              <div className="text-center py-6 bg-base-100 shadow-md border border-gray-400 rounded-box">
                 {loadingProblems ? (
                   <span>Loading challenges...</span>
                 ) : (

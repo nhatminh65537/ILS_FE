@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserData } from '../../../store/myUserSlice';
 import AvatarUploadModal from './AvatarUploadModal';
+import { DEFAULT_AVATAR } from '../../../constants/constants';
 
 const ProfileHeader = ({ user, profile }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const ProfileHeader = ({ user, profile }) => {
         <div className="avatar relative cursor-pointer group" onClick={handleAvatarClick}>
           <div className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
             <img 
-              src={profile?.avatarPath || "https://picsum.photos/200"} 
+              src={profile?.avatarPath || DEFAULT_AVATAR} 
               alt={`${user.username}'s avatar`}
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-75 flex items-center justify-center transition-opacity">

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchScoreboard } from '../../store/scoreboardSlice';
+import { DEFAULT_AVATAR } from '../../constants/constants';
 
 const ScoreboardPage = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const ScoreboardPage = () => {
       <h1 className="text-2xl font-bold mb-6">Leaderboard</h1>
       
       <div className="overflow-x-auto">
-        <table className="table table-zebra w-full">
+        <table className="table table-auto w-full">
           <thead>
             <tr>
               <th className="w-16 text-center">Rank</th>
@@ -58,7 +59,7 @@ const ScoreboardPage = () => {
           </thead>
           <tbody>
             {users.map((user, index) => (
-              <tr key={user.id} className={user.id === myUserId ? "bg-base-200" : ""}>
+              <tr key={user.id} className={user.id == myUserId ? "bg-base-200" : ""}>
                 <td className="text-center font-bold">
                   {(currentPage - 1) * pageSize + index + 1}
                 </td>
@@ -67,14 +68,13 @@ const ScoreboardPage = () => {
                     <div className="avatar">
                       <div className="mask mask-squircle w-12 h-12">
                         <img 
-                          src={user.avatarPath || "avatar.png"} 
-                          alt={`${user.userName}'s avatar`} 
+                          src={user.avatarPath || DEFAULT_AVATAR} 
+                          alt={`${user.displayName}'s avatar`} 
                         />
                       </div>
                     </div>
                     <div>
-                      <div className="font-bold">{user.displayName || user.userName}</div>
-                      {user.displayName && <div className="text-sm opacity-50">{user.userName}</div>}
+                      <div className="font-bold">{user.displayName}</div>
                     </div>
                   </div>
                 </td>

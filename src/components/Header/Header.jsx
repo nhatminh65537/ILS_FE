@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../store/authSlice";
+import { DEFAULT_AVATAR } from "../../constants/constants";
 
 const Header = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -72,7 +73,7 @@ const Header = () => {
                                 <div className="w-10 rounded-full">
                                     <img
                                         alt="Tailwind CSS Navbar component"
-                                        src= { avatar || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                                        src= { avatar || DEFAULT_AVATAR}
                                     />
                                 </div>
                             </div>

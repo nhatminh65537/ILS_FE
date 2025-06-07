@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import ChallengeCategoryFilter from './ChallengeCategoryFilter';
+import ChallengeTagFilter from './ChallengeTagFilter';
+import ChallengeStateFilter from './ChallengeStateFilter';
+import CreateTagModal from '../modals/CreateTagModal';
+import CreateCategoryModal from '../modals/CreateCategoryModal';
+import DeleteConfirmModal from '../modals/DeleteConfirmModal';
 
 const ChallengeFilterPanel = ({ 
   categories, 
@@ -22,14 +28,13 @@ const ChallengeFilterPanel = ({
   canUpdateCategory,
   filtersLoading
 }) => {
-  const [newTagName, setNewTagName] = useState('');
-  const [newTagDescription, setNewTagDescription] = useState('');
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [newCategoryDescription, setNewCategoryDescription] = useState('');
-  const [showTagForm, setShowTagForm] = useState(false);
-  const [showCategoryForm, setShowCategoryForm] = useState(false);
-  const [tagToEdit, setTagToEdit] = useState(null);
-  const [categoryToEdit, setCategoryToEdit] = useState(null);
+  // States for modals
+  const [isCreateTagModalOpen, setIsCreateTagModalOpen] = useState(false);
+  const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] = useState(false);
+  const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false);
+  const [editingTag, setEditingTag] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [deletingItem, setDeletingItem] = useState(null);
 
   const handleCategoryChange = (categoryId) => {
     const updatedCategoryIds = filters.categoryIds.includes(categoryId)
@@ -78,75 +83,77 @@ const ChallengeFilterPanel = ({
     });
   };
 
-  const handleCreateTag = () => {
-    if (newTagName.trim()) {
-      onCreateTag({
-        name: newTagName.trim(),
-        description: newTagDescription.trim() || newTagName.trim()
-      });
-      setNewTagName('');
-      setNewTagDescription('');
-      setShowTagForm(false);
+  // Tag operations
+  const handleCreateTagClick = () => {
+    setEditingTag(null);
+    setIsCreateTagModalOpen(true);
+  };
+
+  const handleTagInfo = (tag) => {
+    setEditingTag(tag);
+    setIsCreateTagModalOpen(true);
+  };
+
+  const handleDeleteTagClick = (tagId) => {
+    const tag = tags.find(t => t.id === tagId);
+    if (tag) {
+      setDeletingItem({ type: 'Tag', id: tagId, name: tag.name });
+      setIsDeleteConfirmModalOpen(true);
     }
   };
 
-  const handleCreateCategory = () => {
-    if (newCategoryName.trim()) {
-      onCreateCategory({
-        name: newCategoryName.trim(),
-        description: newCategoryDescription.trim() || newCategoryName.trim()
-      });
-      setNewCategoryName('');
-      setNewCategoryDescription('');
-      setShowCategoryForm(false);
-    }
-  };
-
-  const handleEditTag = (tag) => {
-    setTagToEdit(tag);
-    setNewTagName(tag.name);
-    setNewTagDescription(tag.description);
-    setShowTagForm(true);
-  };
-
-  const handleUpdateTag = () => {
-    if (tagToEdit && newTagName.trim()) {
+  const handleSaveTag = (tagData) => {
+    if (editingTag) {
       onUpdateTag({
-        id: tagToEdit.id,
-        tag: {
-          ...tagToEdit,
-          name: newTagName.trim(),
-          description: newTagDescription.trim() || newTagName.trim()
-        }
+        id: tagData.id,
+        tag: tagData
       });
-      setTagToEdit(null);
-      setNewTagName('');
-      setNewTagDescription('');
-      setShowTagForm(false);
+    } else {
+      onCreateTag(tagData);
+    }
+    setIsCreateTagModalOpen(false);
+  };
+
+  // Category operations
+  const handleCreateCategoryClick = () => {
+    setEditingCategory(null);
+    setIsCreateCategoryModalOpen(true);
+  };
+
+  const handleCategoryInfo = (category) => {
+    setEditingCategory(category);
+    setIsCreateCategoryModalOpen(true);
+  };
+
+  const handleDeleteCategoryClick = (categoryId) => {
+    const category = categories.find(c => c.id === categoryId);
+    if (category) {
+      setDeletingItem({ type: 'Category', id: categoryId, name: category.name });
+      setIsDeleteConfirmModalOpen(true);
     }
   };
 
-  const handleEditCategory = (category) => {
-    setCategoryToEdit(category);
-    setNewCategoryName(category.name);
-    setNewCategoryDescription(category.description);
-    setShowCategoryForm(true);
+  const handleSaveCategory = (categoryData) => {
+    if (editingCategory) {
+      onUpdateCategory({
+        id: categoryData.id,
+        category: categoryData
+      });
+    } else {
+      onCreateCategory(categoryData);
+    }
+    setIsCreateCategoryModalOpen(false);
   };
 
-  const handleUpdateCategory = () => {
-    if (categoryToEdit && newCategoryName.trim()) {
-      onUpdateCategory({
-        id: categoryToEdit.id,
-        category: {
-          ...categoryToEdit,
-          name: newCategoryName.trim(),
-          description: newCategoryDescription.trim() || newCategoryName.trim()
-        }
-      });
-      setCategoryToEdit(null);
-      setNewCategoryName('');
-      setNewCategoryDescription('');
-      setShowCategoryForm(false);
+  // Delete confirmation handler
+  const handleConfirmDelete = () => {
+    if (deletingItem) {
+      if (deletingItem.type === 'Tag') {
+        onDeleteTag(deletingItem.id);
+      } else if (deletingItem.type === 'Category') {
+        onDeleteCategory(deletingItem.id);
+      }
+      setIsDeleteConfirmModalOpen(false);
     }
   };
 
@@ -163,7 +170,7 @@ const ChallengeFilterPanel = ({
           type="text"
           placeholder="Search challenges..."
           className="input input-bordered w-full"
-          value={filters.searchTerm}
+          value={filters.searchTerm || ''}
           onChange={handleSearchChange}
           disabled={filtersLoading}
         />
@@ -176,7 +183,7 @@ const ChallengeFilterPanel = ({
           <input
             type="checkbox"
             className="toggle toggle-primary"
-            checked={filters.getSolved}
+            checked={filters.getSolved || false}
             onChange={handleGetSolvedChange}
             disabled={filtersLoading}
           />
@@ -184,197 +191,40 @@ const ChallengeFilterPanel = ({
       </div>
       
       {/* Categories */}
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <h4 className="font-medium">Categories</h4>
-          {canCreateCategory && (
-            <button
-              onClick={() => setShowCategoryForm(!showCategoryForm)}
-              className="btn btn-xs btn-primary"
-              disabled={filtersLoading}
-            >
-              {showCategoryForm ? 'Cancel' : '+ Add'}
-            </button>
-          )}
-        </div>
-        
-        {showCategoryForm && (
-          <div className="p-2 border rounded-md mb-2">
-            <input
-              type="text"
-              placeholder="Category name"
-              className="input input-sm input-bordered w-full mb-2"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Description (optional)"
-              className="input input-sm input-bordered w-full mb-2"
-              value={newCategoryDescription}
-              onChange={(e) => setNewCategoryDescription(e.target.value)}
-            />
-            <div className="flex justify-end">
-              {categoryToEdit ? (
-                <button
-                  onClick={handleUpdateCategory}
-                  className="btn btn-xs btn-success"
-                >
-                  Update
-                </button>
-              ) : (
-                <button
-                  onClick={handleCreateCategory}
-                  className="btn btn-xs btn-success"
-                >
-                  Create
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-2 mt-2">
-          {categories.map(category => (
-            <div key={category.id} className="inline-flex items-center">
-              <label className="flex cursor-pointer gap-1">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm"
-                  checked={filters.categoryIds.includes(category.id)}
-                  onChange={() => handleCategoryChange(category.id)}
-                  disabled={filtersLoading}
-                />
-                <span>{category.name}</span>
-              </label>
-              {canUpdateCategory && (
-                <button
-                  onClick={() => handleEditCategory(category)}
-                  className="btn btn-xs btn-ghost btn-circle"
-                  disabled={filtersLoading}
-                >
-                  ✏️
-                </button>
-              )}
-              {canDeleteCategory && (
-                <button
-                  onClick={() => onDeleteCategory(category.id)}
-                  className="btn btn-xs btn-ghost btn-circle text-error"
-                  disabled={filtersLoading}
-                >
-                  ❌
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      <ChallengeCategoryFilter
+        categories={categories}
+        selectedCategories={filters.categoryIds || []}
+        onCategoryChange={handleCategoryChange}
+        onCreateCategory={handleCreateCategoryClick}
+        onDeleteCategory={handleDeleteCategoryClick}
+        onCategoryInfo={handleCategoryInfo}
+        canCreateCategory={canCreateCategory}
+        canDeleteCategory={canDeleteCategory}
+        canUpdateCategory={canUpdateCategory}
+        disabled={filtersLoading}
+      />
       
       {/* Tags */}
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <h4 className="font-medium">Tags</h4>
-          {canCreateTag && (
-            <button
-              onClick={() => setShowTagForm(!showTagForm)}
-              className="btn btn-xs btn-primary"
-              disabled={filtersLoading}
-            >
-              {showTagForm ? 'Cancel' : '+ Add'}
-            </button>
-          )}
-        </div>
-        
-        {showTagForm && (
-          <div className="p-2 border rounded-md mb-2">
-            <input
-              type="text"
-              placeholder="Tag name"
-              className="input input-sm input-bordered w-full mb-2"
-              value={newTagName}
-              onChange={(e) => setNewTagName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Description (optional)"
-              className="input input-sm input-bordered w-full mb-2"
-              value={newTagDescription}
-              onChange={(e) => setNewTagDescription(e.target.value)}
-            />
-            <div className="flex justify-end">
-              {tagToEdit ? (
-                <button
-                  onClick={handleUpdateTag}
-                  className="btn btn-xs btn-success"
-                >
-                  Update
-                </button>
-              ) : (
-                <button
-                  onClick={handleCreateTag}
-                  className="btn btn-xs btn-success"
-                >
-                  Create
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-2 mt-2">
-          {tags.map(tag => (
-            <div key={tag.id} className="inline-flex items-center">
-              <label className="flex cursor-pointer gap-1">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm"
-                  checked={filters.tagIds.includes(tag.id)}
-                  onChange={() => handleTagChange(tag.id)}
-                  disabled={filtersLoading}
-                />
-                <span>{tag.name}</span>
-              </label>
-              {canUpdateTag && (
-                <button
-                  onClick={() => handleEditTag(tag)}
-                  className="btn btn-xs btn-ghost btn-circle"
-                  disabled={filtersLoading}
-                >
-                  ✏️
-                </button>
-              )}
-              {canDeleteTag && (
-                <button
-                  onClick={() => onDeleteTag(tag.id)}
-                  className="btn btn-xs btn-ghost btn-circle text-error"
-                  disabled={filtersLoading}
-                >
-                  ❌
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      <ChallengeTagFilter
+        tags={tags}
+        selectedTags={filters.tagIds || []}
+        onTagChange={handleTagChange}
+        onCreateTag={handleCreateTagClick}
+        onDeleteTag={handleDeleteTagClick}
+        onTagInfo={handleTagInfo}
+        canCreateTag={canCreateTag}
+        canDeleteTag={canDeleteTag}
+        canUpdateTag={canUpdateTag}
+        disabled={filtersLoading}
+      />
       
       {/* States */}
-      <div className="mb-4">
-        <h4 className="font-medium mb-2">States</h4>
-        <div className="flex flex-wrap gap-2">
-          {states.map(state => (
-            <label key={state.id} className="flex cursor-pointer gap-1">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm"
-                checked={filters.stateIds.includes(state.id)}
-                onChange={() => handleStateChange(state.id)}
-                disabled={filtersLoading}
-              />
-              <span>{state.name}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+      <ChallengeStateFilter
+        states={states}
+        selectedStates={filters.stateIds || []}
+        onStateChange={handleStateChange}
+        disabled={filtersLoading}
+      />
       
       {/* Filter Actions */}
       <div className="flex flex-col gap-2 mt-6">
@@ -395,6 +245,32 @@ const ChallengeFilterPanel = ({
           Reset Filters
         </button>
       </div>
+
+      {/* Modals */}
+      <CreateTagModal
+        isOpen={isCreateTagModalOpen}
+        onClose={() => setIsCreateTagModalOpen(false)}
+        onSave={handleSaveTag}
+        tag={editingTag}
+        loading={filtersLoading}
+      />
+
+      <CreateCategoryModal
+        isOpen={isCreateCategoryModalOpen}
+        onClose={() => setIsCreateCategoryModalOpen(false)}
+        onSave={handleSaveCategory}
+        category={editingCategory}
+        loading={filtersLoading}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteConfirmModalOpen}
+        onClose={() => setIsDeleteConfirmModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        itemType={deletingItem?.type || ''}
+        itemName={deletingItem?.name || ''}
+        loading={filtersLoading}
+      />
     </div>
   );
 };

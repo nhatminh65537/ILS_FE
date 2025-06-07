@@ -171,14 +171,14 @@ const ModuleView = () => {
               </div>
               
               <div className="stats stats-horizontal bg-base-200 shadow-sm my-4 text-sm">
-                {currentModule.duration && (
+                {(
                   <div className="stat">
                     <div className="stat-title">Duration</div>
                     <div className="stat-value text-2xl">{currentModule.duration}</div>
                     <div className="stat-desc">minutes</div>
                   </div>
                 )}
-                {currentModule.xp && (
+                {(
                   <div className="stat">
                     <div className="stat-title">Experience</div>
                     <div className="stat-value text-2xl">{currentModule.xp}</div>

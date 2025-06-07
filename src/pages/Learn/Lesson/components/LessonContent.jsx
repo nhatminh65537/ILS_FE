@@ -10,18 +10,19 @@ const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
   const [isFinishable, setIsFinishable] = useState(false);
 
   const finishedLessonIds = useSelector(state => state.contentEdit.finishedLessonIds || []);
-  
+
+
   // Start timer when content is loaded
   useEffect(() => {
     if (lesson && lesson.content) {
       const timer = setInterval(() => {
         setReadTime(prev => prev + 1);
       }, 1000);
-      
+
       return () => clearInterval(timer);
     }
   }, [lesson]);
-  
+
   // Determine if lesson can be marked as finished
   useEffect(() => {
     // For now, enable finish button after 10 seconds of reading time
@@ -50,7 +51,7 @@ const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
       )}
       
       <div className="flex gap-2 mb-6 text-sm text-base-content/70">
-        {lesson.duration && (
+        {(
           <div className="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -59,7 +60,7 @@ const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
           </div>
         )}
         
-        {lesson.xp && (
+        {(
           <div className="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />

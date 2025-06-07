@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-var host = import.meta.env.VITE_API_HOST || "localhost:7185"; // Default to localhost:7185 if API_HOST is not set
+var host = import.meta.env.VITE_API_HOST; // Default to localhost:7185 if API_HOST is not set
 console.log("API_HOST:", import.meta.env);
 var url = `http://${host}/api`;
 

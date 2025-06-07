@@ -189,7 +189,8 @@ export const updateChallengeTag = createAsyncThunk(
   'challenge/updateChallengeTag',
   async ({ id, tag }, { rejectWithValue }) => {
     try {
-      return await challengeTagsAPI.update(id, tag);
+      await challengeTagsAPI.update(id, tag);
+      return { id, ...tag };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }

@@ -150,7 +150,7 @@ const LessonView = () => {
       
       <div className="flex flex-grow overflow-hidden mt-16">
         {/* Left Sidebar */}
-        <div className="w-64 border-r bg-base-100 overflow-y-auto">
+        <div className="w-75 w-min-75 border-r bg-base-100 overflow-y-auto">
           <LessonContentTree 
             contentTree={contentTree} 
             activeNodeId={activeNodeId}

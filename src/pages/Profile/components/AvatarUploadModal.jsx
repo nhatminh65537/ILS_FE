@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { uploadImageFile, getImageFileFromClipboard } from '../../../utils/fileUpload';
+import { uploadAvatarFile, getImageFileFromClipboard } from '../../../utils/fileUpload';
+import { DEFAULT_AVATAR } from '../../../constants/constants';
 
 // Update the props to include username
 const AvatarUploadModal = ({ isOpen, onClose, currentAvatar, onSave, username = 'user' }) => {
@@ -80,7 +81,7 @@ const AvatarUploadModal = ({ isOpen, onClose, currentAvatar, onSave, username = 
     
     try {
       // Upload the file and get the URL path, passing username for the filename
-      const imageUrl = await uploadImageFile(selectedFile, username);
+      const imageUrl = await uploadAvatarFile(selectedFile, username);
       
       // Call the parent component's save handler with the new URL
       onSave(imageUrl.url);
@@ -119,7 +120,7 @@ const AvatarUploadModal = ({ isOpen, onClose, currentAvatar, onSave, username = 
         <div className="flex flex-col items-center my-4">
           <div className="avatar">
             <div className="w-32 h-32 rounded-full">
-              <img src={previewUrl || "https://picsum.photos/200"} alt="Avatar preview" />
+              <img src={previewUrl || DEFAULT_AVATAR} alt="Avatar preview" />
             </div>
           </div>
         </div>

@@ -58,7 +58,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
       </div>
 
       {isEditingContent ? (
-        <div className="prose-sm border rounded-lg p-4 bg-base-100">
+        <div className="prose-sm border rounded-lg p-4 mr-20 ml-20 bg-base-100">
           <MyEditor
             id={`lesson-content-editor-${lessonId}`}
             data={
@@ -73,7 +73,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="form-control">
-              <label className="label">
+              <label className="label block">
                 <span className="label-text">Title</span>
               </label>
               <input
@@ -89,7 +89,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label block">
                 <span className="label-text">Order</span>
               </label>
               <input
@@ -107,7 +107,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label block">
                 <span className="label-text">XP</span>
               </label>
               <input
@@ -123,7 +123,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label block">
                 <span className="label-text">Duration (minutes)</span>
               </label>
               <input
@@ -142,7 +142,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
           </div>
 
           <div className="form-control mt-6">
-            <label className="label">
+            <label className="label block">
               <span className="label-text">Description</span>
             </label>
             <textarea

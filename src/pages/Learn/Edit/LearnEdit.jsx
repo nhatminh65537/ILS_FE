@@ -319,7 +319,7 @@ const LearnEdit = () => {
       
       <div className="flex flex-grow overflow-hidden">
         {/* Left Sidebar */}
-        <div className="w-64 border-r bg-base-100 overflow-y-auto">
+        <div className="w-75 min-w-75 border-r bg-base-100 overflow-y-auto">
           <ContentTree 
             contentTree={contentTree} 
             onSelectItem={(item) => {

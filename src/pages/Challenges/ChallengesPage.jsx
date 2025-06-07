@@ -308,7 +308,6 @@ const ChallengesPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">CTF Challenges</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Filter sidebar */}
@@ -342,10 +341,9 @@ const ChallengesPage = () => {
         {/* Content area */}
         <div className="md:col-span-3">
           {/* Breadcrumbs on top of content for mobile/small screens */}
-          
 
           {/* Navigation buttons: pre, parent, post */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex gap-2">
             <button
               className="btn btn-outline btn-sm"
               onClick={() => {
@@ -397,6 +395,8 @@ const ChallengesPage = () => {
             />
             </div>
           </div>
+
+          <h1 className="text-2xl font-bold">CTF Challenges</h1>
 
           {/* Action buttons */}
           {(canCreateFolder || canCreateProblem) && (

@@ -2,7 +2,7 @@
  * Uploads a file to the server's public folder and returns the URL path
  * Saves with the format username_datecreate.jpg in the public/avatar/ directory
  */
-export const uploadImageFile = async (file, username = 'user') => {
+export const uploadAvatarFile = async (file, username = 'user') => {
   if (!file || !file.type.match('image.*')) {
     throw new Error('Please select a valid image file');
   }
@@ -20,7 +20,7 @@ export const uploadImageFile = async (file, username = 'user') => {
     
     // Create FormData for the API call
     const formData = new FormData();
-    formData.append('avatar', file);
+    formData.append('image', file);
     formData.append('fileName', fileName);
     
     // In a real implementation, this would be your API endpoint to save to public folder
@@ -53,6 +53,22 @@ export const uploadImageFile = async (file, username = 'user') => {
     throw new Error('Failed to upload image. Please try again.');
   }
 };
+
+export const uploadImageFile = async (file) => {
+  if (!file) throw new Error('No file selected');
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  // You may need to adjust the endpoint for your backend file upload
+  const response = await fetch(`http://cdn.rougitsune.top/upload`, {
+    method: 'POST',
+    body: formData,
+  });
+  
+  if (!response.ok) throw new Error('Failed to upload image');
+  
+  return (await response.json()).url;
+}
 
 /**
  * Uploads a challenge file (not avatar) and returns the file DTO

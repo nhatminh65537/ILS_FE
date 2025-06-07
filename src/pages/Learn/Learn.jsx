@@ -157,7 +157,7 @@ const Learn = () => {
   };
   
   return (
-    <div className="container mx-auto px-4 py-8 pt-20">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row gap-6">
         <div className="md:w-1/4 p-4 bg-base-100 rounded-lg shadow-lg">
           <form onSubmit={handleSearch} className="mb-6">

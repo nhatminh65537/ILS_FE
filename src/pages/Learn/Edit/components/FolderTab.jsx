@@ -35,7 +35,7 @@ const FolderTab = ({ folderId, onChange, unsavedChanges = {}, onSave, onDelete }
       <h2 className="text-xl font-bold mb-4">Folder Settings</h2>
       
       <div className="form-control">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">Title</span>
         </label>
         <input 
@@ -47,7 +47,7 @@ const FolderTab = ({ folderId, onChange, unsavedChanges = {}, onSave, onDelete }
       </div>
       
       <div className="form-control mt-6">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">Description</span>
         </label>
         <textarea 
@@ -58,7 +58,7 @@ const FolderTab = ({ folderId, onChange, unsavedChanges = {}, onSave, onDelete }
       </div>
       
       <div className="form-control mt-6">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">Order</span>
         </label>
         <input 

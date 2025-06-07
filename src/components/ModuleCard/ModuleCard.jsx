@@ -35,7 +35,7 @@ const ModuleCard = ({ module }) => {
     }
 
     return (
-        <div className="card card-compact bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="card border border-green-200 card-compact bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <figure className="h-48 overflow-hidden">
                 <img
                     src={imageUrl}

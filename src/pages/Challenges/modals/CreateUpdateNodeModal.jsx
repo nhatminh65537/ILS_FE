@@ -31,6 +31,7 @@ const CreateUpdateNodeModal = ({
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState(node?.problem?.files || []);
   const [fileInput, setFileInput] = useState('');
+  const [tagSearch, setTagSearch] = useState(''); // Add state for tag search
   const fileRef = useRef();
 
   useEffect(() => {
@@ -335,6 +336,7 @@ const CreateUpdateNodeModal = ({
                 )}
               </div>
               
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="form-control mb-4">
                 <label className="label">
                   <span className="label-text">
@@ -377,28 +379,7 @@ const CreateUpdateNodeModal = ({
                   onChange={handleChange}
                 />
               </div>
-              
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text">Tags</span>
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {tags.map(tag => (
-                    <div key={tag.id} className="inline-flex items-center">
-                      <label className="flex cursor-pointer gap-1">
-                        <input
-                          type="checkbox"
-                          className="checkbox checkbox-sm"
-                          checked={formData.tagIds.includes(tag.id)}
-                          onChange={() => handleTagToggle(tag.id)}
-                        />
-                        <span>{tag.name}</span>
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
+
               <div className="form-control mb-4">
                 <label className="label">
                   <span className="label-text">
@@ -424,6 +405,38 @@ const CreateUpdateNodeModal = ({
                     </span>
                   </label>
                 )}
+              </div>
+
+              </div>
+              
+              <div className="form-control mb-4">
+                <label className="label">
+                  <span className="label-text mr-5">Tags</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Search tags"
+                  className="input input-bordered input-sm mb-2"
+                  value={tagSearch}
+                  onChange={(e) => setTagSearch(e.target.value)}
+                />
+                <div className="flex flex-wrap gap-2">
+                  {tags
+                    .filter(tag => tag.name.toLowerCase().includes(tagSearch.toLowerCase()))
+                    .map(tag => (
+                      <div key={tag.id} className="inline-flex items-center">
+                        <label className="flex cursor-pointer gap-1">
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-sm"
+                            checked={formData.tagIds.includes(tag.id)}
+                            onChange={() => handleTagToggle(tag.id)}
+                          />
+                          <span>{tag.name}</span>
+                        </label>
+                      </div>
+                    ))}
+                </div>
               </div>
               
               {/* File upload section */}

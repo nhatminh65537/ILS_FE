@@ -63,7 +63,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="form-control">
-          <label className="label">
+          <label className="label block">
             <span className="label-text">Username</span>
           </label>
           <input
@@ -79,7 +79,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
         </div>
         
         <div className="form-control">
-          <label className="label">
+          <label className="label block">
             <span className="label-text">Email</span>
           </label>
           <input
@@ -95,7 +95,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
         </div>
         
         <div className="form-control">
-          <label className="label">
+          <label className="label block">
             <span className="label-text">Phone Number</span>
           </label>
           <input
@@ -108,7 +108,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
         </div>
         
         <div className="form-control">
-          <label className="label">
+          <label className="label block">
             <span className="label-text">Display Name</span>
           </label>
           <input
@@ -121,7 +121,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
         </div>
         
         <div className="form-control">
-          <label className="label">
+          <label className="label block">
             <span className="label-text">First Name</span>
           </label>
           <input
@@ -134,7 +134,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
         </div>
         
         <div className="form-control">
-          <label className="label">
+          <label className="label block">
             <span className="label-text">Last Name</span>
           </label>
           <input
@@ -148,7 +148,7 @@ const PersonalInfoForm = ({ userData, profile }) => {
       </div>
       
       <div className="form-control">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">Bio</span>
         </label>
         <textarea

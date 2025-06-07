@@ -54,6 +54,18 @@ const logoutUser = createAsyncThunk(
     }
 );
 
+const changePassword = createAsyncThunk(
+    'auth/changePassword',
+    async ({ oldPassword, newPassword }, { rejectWithValue }) => {
+        try {
+            const responseData = await authAPI.changePassword(oldPassword, newPassword);
+            return responseData; 
+        } catch (error) {
+            return rejectWithValue(error.message || "error"); 
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: getInitialAuthState(),
@@ -102,10 +114,22 @@ const authSlice = createSlice({
             .addCase(logoutUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+            })
+            .addCase(changePassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(changePassword.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     },
 });
 
 export const { clearError } = authSlice.actions;
-export { loginUser, registerUser, logoutUser };
+export { loginUser, registerUser, logoutUser, changePassword };
 export default authSlice.reducer;

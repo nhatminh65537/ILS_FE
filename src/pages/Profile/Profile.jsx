@@ -40,7 +40,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-200 pt-20 px-4 pb-6">
+    <div className="min-h-screen bg-base-200 pt-10 px-4 pb-6">
       <div className="max-w-4xl mx-auto">
         {userData && (
           <>

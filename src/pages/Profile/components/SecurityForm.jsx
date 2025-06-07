@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserData } from '../../../store/myUserSlice';
+import { changePassword } from '../../../store/authSlice';
 
 const SecurityForm = ({ userId }) => {
   const dispatch = useDispatch();
@@ -61,12 +62,11 @@ const SecurityForm = ({ userId }) => {
     try {
       // Prepare the data for API
       const updateData = {
-        id: userId,
-        currentPassword: formData.currentPassword,
+        oldPassword: formData.currentPassword,
         newPassword: formData.newPassword,
       };
-      
-      await dispatch(updateUserData(updateData)).unwrap();
+
+      await dispatch(changePassword(updateData)).unwrap();
       setSuccessMessage('Password updated successfully!');
       
       // Reset form
@@ -102,7 +102,7 @@ const SecurityForm = ({ userId }) => {
       )}
       
       <div className="form-control">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">Current Password</span>
         </label>
         <input
@@ -120,7 +120,7 @@ const SecurityForm = ({ userId }) => {
       </div>
       
       <div className="form-control">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">New Password</span>
         </label>
         <input
@@ -138,7 +138,7 @@ const SecurityForm = ({ userId }) => {
       </div>
       
       <div className="form-control">
-        <label className="label">
+        <label className="label block">
           <span className="label-text">Confirm New Password</span>
         </label>
         <input

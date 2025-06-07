@@ -56,7 +56,8 @@ const Learn = () => {
   const canCreateCategory = useSelector(state => hasPermission(state, PERMISSIONS.Categories.Create));
   const canDeleteCategory = useSelector(state => hasPermission(state, PERMISSIONS.Categories.Delete));
   const canUpdateCategory = useSelector(state => hasPermission(state, PERMISSIONS.Categories.Update));
-  
+  const canGetAllLifecycleStates = true || useSelector(state => hasPermission(state, PERMISSIONS.LifecycleStates.GetAll));
+
   const [localFilters, setLocalFilters] = useState({
     categoryIds: [],
     tagIds: [],
@@ -201,6 +202,7 @@ const Learn = () => {
             canCreateCategory={canCreateCategory}
             canDeleteCategory={canDeleteCategory}
             canUpdateCategory={canUpdateCategory}
+            canGetAllLifecycleStates={canGetAllLifecycleStates}
             filtersLoading={filtersLoading}
           />
         </div>

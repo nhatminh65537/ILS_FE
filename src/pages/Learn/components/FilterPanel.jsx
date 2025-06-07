@@ -24,7 +24,8 @@ const FilterPanel = ({
   canCreateCategory,
   canDeleteCategory,
   canUpdateCategory,
-  filtersLoading 
+  canGetAllLifecycleStates,
+  filtersLoading
 }) => {
   const handleCategoryChange = (categoryId) => {
     const updatedCategoryIds = filters.categoryIds.includes(categoryId)
@@ -89,13 +90,14 @@ const FilterPanel = ({
         disabled={filtersLoading}
       />
       
-      <LifecycleStateFilter
+      {canGetAllLifecycleStates && ( <LifecycleStateFilter
         lifecycleStates={lifecycleStates}
         selectedStates={filters.lifecycleStateIds}
         onStateChange={handleLifecycleStateChange}
         onStateInfo={onLifecycleStateInfo}
         disabled={filtersLoading}
       />
+      )}
       
       <div className="flex flex-col gap-2 mt-6">
         <button 

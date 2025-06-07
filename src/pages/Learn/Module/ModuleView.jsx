@@ -6,6 +6,7 @@ import { getModuleProgressById, updateModuleProgress, fetchModuleProgress } from
 import ModuleProgressBar from '../../../components/ModuleCard/ModuleProgressBar';
 import ModuleContentTree from './components/ModuleContentTree';
 import { learnProgressStatesAPI, PROGRESS_STATES } from '../../../apis/learnProgressStates';
+import { MODULE_IMAGE } from '../../../constants/constants';
 
 const ModuleView = () => {
   const { moduleId } = useParams();
@@ -136,18 +137,12 @@ const ModuleView = () => {
       
       <div className="card bg-base-100 shadow-xl mb-8">
         <figure className="relative">
-          {currentModule.imagePath ? (
+          {(
             <img 
-              src={currentModule.imagePath} 
+              src={currentModule.imagePath || MODULE_IMAGE} 
               alt={currentModule.title} 
               className="w-full h-64 object-cover"
             />
-          ) : (
-            <div className="w-full h-64 bg-base-200 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
           )}
           {currentModule.lifecycleState && (
             <div className="absolute top-2 right-2">

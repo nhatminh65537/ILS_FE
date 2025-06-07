@@ -5,15 +5,17 @@ import { hasPermission, getModuleProgressById } from "../../store/myUserSlice";
 import { PERMISSIONS } from "../../constants/permissions";
 import { PROGRESS_STATES } from "../../apis/learnProgressStates";
 import ModuleProgressBar from "./ModuleProgressBar";
+import { MODULE_IMAGE } from "../../constants/constants";
 
 const ModuleCard = ({ module }) => {
     // Use a default image if module.imagePath is not available
-    const imageUrl = module.imagePath || "https://picsum.photos/300/200";
+    const imageUrl = module.imagePath || MODULE_IMAGE;
 
     const canUpdate = useSelector((state) =>
         hasPermission(state, PERMISSIONS.Modules.Update)
     );
-    
+    const notPublished = false && module.lifecycleState.name !== "Published";
+
     // Get module progress from Redux store
     const moduleProgress = useSelector((state) => 
         getModuleProgressById(state, module.id)
@@ -35,7 +37,7 @@ const ModuleCard = ({ module }) => {
     }
 
     return (
-        <div className="card border border-green-200 card-compact bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className="card border border-gray-400 card-compact bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <figure className="h-48 overflow-hidden">
                 <img
                     src={imageUrl}
@@ -106,6 +108,7 @@ const ModuleCard = ({ module }) => {
                     <Link
                         to={`/learn/${module.id}`}
                         className={`btn ${buttonColorClass} btn-sm`}
+                        disabled={notPublished}
                     >
                         {buttonText}
                     </Link>

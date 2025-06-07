@@ -181,9 +181,7 @@ const ChallengesPage = () => {
   };
 
   const handleDeleteCategory = (id) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      dispatch(deleteChallengeCategory(id));
-    }
+    dispatch(deleteChallengeCategory(id));
   };
 
   // CRUD handlers for tags
@@ -196,9 +194,7 @@ const ChallengesPage = () => {
   };
 
   const handleDeleteTag = (id) => {
-    if (window.confirm('Are you sure you want to delete this tag?')) {
-      dispatch(deleteChallengeTag(id));
-    }
+    dispatch(deleteChallengeTag(id));
   };
 
   // CRUD handlers for nodes
@@ -216,9 +212,7 @@ const ChallengesPage = () => {
   };
 
   const handleDeleteNode = (nodeId, isProblem) => {
-    if (window.confirm('Are you sure you want to delete this item?')) {
-      dispatch(deleteChallengeNode({ id: nodeId, isProblem }));
-    }
+    dispatch(deleteChallengeNode({ id: nodeId, isProblem }));
   };
 
   // Separate handlers for folder and problem

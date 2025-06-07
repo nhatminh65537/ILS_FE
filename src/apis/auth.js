@@ -57,4 +57,21 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   }
+
+  ,
+    /**
+     * Resets the user's password.
+     * @param {string} oldPassword - The user's current password.
+     * @param {string} newPassword - The new password to set.
+     * @returns {Promise<Object>} - The response data from the server.
+     * @throws {Error} - Throws an error if the reset fails.
+     */
+    changePassword: async (oldPassword, newPassword) => {
+      try {
+        const response = await apiClient.post(`${prefix}/changepasswd`, { oldPassword, newPassword });
+        return response.data;
+      } catch (error) {
+        throw error.response?.data || error.message;
+      }
+    }
 };

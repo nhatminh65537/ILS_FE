@@ -17,6 +17,7 @@ import Profile from "./pages/Profile/Profile.jsx";
 import ChallengesPage from "./pages/Challenges/ChallengesPage.jsx";
 import ScoreboardPage from "./pages/Scoreboard/ScoreboardPage.jsx";
 import Home from "./pages/Home/Home.jsx";
+import PermissionManagement from "./pages/PermissionManagement/PermissionManagement.jsx";
 
 // Wrapper component to initialize user data if authenticated
 const AppWithAuth = () => {
@@ -77,7 +78,14 @@ const AppWithAuth = () => {
                             path="profile"
                             element={<Profile />}
                         />
-                        <Route path="learn/:moduleId" element={<ModuleView />} />
+                        <Route
+                            path="learn/:moduleId"
+                            element={<ModuleView />}
+                        />
+                        <Route
+                            path="/permissions"
+                            element={<PermissionManagement />}
+                        />
                     </Route>
 
                     {/* 404 route */}

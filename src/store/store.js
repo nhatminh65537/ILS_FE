@@ -6,6 +6,8 @@ import contentEditReducer from './contentEditSlice';
 import lessonTypesReducer from './lessonTypesSlice';
 import challengeReducer from './challengeSlice';
 import scoreboardReducer from './scoreboardSlice';
+import permissionManagementReducer from './permissionManagementSlice';
+import permissionsReducer from './permissionsSlice';
 
 const store = configureStore({
     reducer: {
@@ -16,6 +18,8 @@ const store = configureStore({
         lessonTypes: lessonTypesReducer,
         challenge: challengeReducer,
         scoreboard: scoreboardReducer,
+        permissionManagement: permissionManagementReducer,
+        permissions: permissionsReducer
     },
 });
 

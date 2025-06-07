@@ -1,13 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link, useLocation } from "react-router-dom";
 import { logoutUser } from "../../store/authSlice";
 import { DEFAULT_AVATAR } from "../../constants/constants";
+import { hasPermission } from "../../store/myUserSlice";
+import { PERMISSIONS } from "../../constants/permissions";
 
 const Header = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const avatar = useSelector((state) => state.myUser.profile?.avatarPath);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { pathname } = useLocation();
 
     const handleLogin = () => {
         navigate("/login");
@@ -21,6 +24,12 @@ const Header = () => {
         dispatch(logoutUser());
         navigate("/");
     };
+
+    // Check if user has permission to manage permissions
+    const canAccessPermissions = useSelector((state) =>
+        hasPermission(state, PERMISSIONS.Roles.AddPermission) ||
+        hasPermission(state, PERMISSIONS.Users.AddPermission)
+    );
 
     return (
         <div className="navbar bg-base-100 fixed z-50 shadow-lg">
@@ -39,6 +48,13 @@ const Header = () => {
                     <li>
                         <NavLink to="/scoreboard">Scoreboard</NavLink>
                     </li>
+                    {canAccessPermissions && (
+                        <li>
+                            <Link to="/permissions" className={pathname === '/permissions' ? 'active' : ''}>
+                                Permissions
+                            </Link>
+                        </li>
+                    )}
                 </ul>
             </div>
             <div className="navbar-end">
@@ -73,7 +89,7 @@ const Header = () => {
                                 <div className="w-10 rounded-full">
                                     <img
                                         alt="Tailwind CSS Navbar component"
-                                        src= { avatar || DEFAULT_AVATAR}
+                                        src={avatar || DEFAULT_AVATAR}
                                     />
                                 </div>
                             </div>

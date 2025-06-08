@@ -35,7 +35,7 @@ const PermissionsList = ({
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">
-        {isRole ? `Permissions for Role: ${object.name}` : `Permissions for User: ${object.username}`}
+        {isRole ? `Permissions for Role: ${object.name}` : `Permissions for User: ${object.userName}`}
       </h2>
       
       {/* Permissions by group */}
@@ -44,22 +44,23 @@ const PermissionsList = ({
           <div className="collapse collapse-arrow bg-base-200">
             <input type="checkbox" defaultChecked /> 
             <div className="collapse-title text-lg font-medium">
-              <label className="cursor-pointer flex items-center">
+              <div className="cursor-pointer flex items-center">
                 <input 
                   type="checkbox" 
-                  className="checkbox mr-2" 
-                  checked={permissions.every(p => isPermissionAssigned(p.name))}
+                  className="checkbox mr-2 z-1" 
+                  checked={permissions.every(p => isPermissionAssigned(p.id))}
                   onChange={(e) => {
+                    console.log('Checked all')
                     const newValue = e.target.checked;
                     const changes = {};
                     permissions.forEach(p => {
-                      changes[p.name] = newValue;
+                      changes[p.id] = newValue;
                     });
                     setPendingChanges(prev => ({...prev, ...changes}));
                   }}
                 />
                 All actions on {group}
-              </label>
+              </div>
             </div>
             <div className="collapse-content">
               {permissions.map(permission => (
@@ -68,8 +69,8 @@ const PermissionsList = ({
                     <input 
                       type="checkbox" 
                       className="checkbox checkbox-sm mr-2"
-                      checked={isPermissionAssigned(permission.name)}
-                      onChange={(e) => handlePermissionChange(permission.name, e.target.checked)}
+                      checked={isPermissionAssigned(permission.id)}
+                      onChange={(e) => handlePermissionChange(permission.id, e.target.checked)}
                     />
                     <span className="flex-grow">{permission.description}</span>
                     {canEditPermissionDescription && (

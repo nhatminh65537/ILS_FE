@@ -90,12 +90,11 @@ const ContentTree = ({ contentTree, onSelectItem }) => {
         }));
         
         // Dispatch with updated parameters
-        dispatch(addContentItem({ 
+        await dispatch(addContentItem({ 
           parentId: newItemData.parentId, 
           type: newItemData.type,
           newItem 
         }));
-        await new Promise(resolve => setTimeout(resolve, 1000));
         await dispatch(fetchModuleContent(currentModule.id)); // Refresh the module content
       }
     } catch (error) {

@@ -15,12 +15,14 @@ import {
   updatePermissionDescription,
   setIsRole,
   setObject,
+  fetchAllPermissions,
 } from '../../store/permissionManagementSlice';
 
 // Import subcomponents
 import Sidebar from './components/Sidebar';
 import PermissionsList from './components/PermissionsList';
 import EditPermissionDialog from './components/EditPermissionDialog';
+import { current } from '@reduxjs/toolkit';
 
 const PermissionManagement = () => {
   const dispatch = useDispatch();
@@ -32,6 +34,7 @@ const PermissionManagement = () => {
     currentFetchedUser,
     userRoles,
     loading,
+    listPermissions,
   } = useSelector(state => state.permissionManagement);
   
   const [pendingChanges, setPendingChanges] = useState({});
@@ -92,7 +95,20 @@ const PermissionManagement = () => {
     dispatch(fetchUserRoles(user.id));
     setPendingChanges({});
   };
-  
+
+  // Fetch all permissions on component mount
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      await dispatch(fetchAllPermissions());
+    };
+    fetchPermissions();
+  }, [dispatch]);
+
+  const getPermissionByName = (name) => {
+    return listPermissions.find(permission =>
+      permission.name === name
+    );
+  };
   // Group permissions by category
   const getGroupedPermissions = () => {
     // All permissions organized by resource type
@@ -100,110 +116,106 @@ const PermissionManagement = () => {
       {
         group: "Modules",
         permissions: [
-          { id: "LearnModules.Create", name: "LearnModules.Create", description: "Create Module" },
-          { id: "LearnModules.Update", name: "LearnModules.Update", description: "Update Module" },
-          { id: "LearnModules.Delete", name: "LearnModules.Delete", description: "Delete Module" }
+          getPermissionByName(PERMISSIONS.Modules.Create),
+          getPermissionByName(PERMISSIONS.Modules.Update),
+          getPermissionByName(PERMISSIONS.Modules.Delete)
         ]
       },
       {
         group: "ModuleTag",
         permissions: [
-          { id: "LearnTags.Create", name: "LearnTags.Create", description: "Create ModuleTag" },
-          { id: "LearnTags.Update", name: "LearnTags.Update", description: "Update ModuleTag" },
-          { id: "LearnTags.Delete", name: "LearnTags.Delete", description: "Delete ModuleTag" }
+          getPermissionByName(PERMISSIONS.Tags.Create),
+          getPermissionByName(PERMISSIONS.Tags.Update),
+          getPermissionByName(PERMISSIONS.Tags.Delete)
         ]
       },
       {
         group: "ModuleCategory", 
         permissions: [
-          { id: "LearnCategories.Create", name: "LearnCategories.Create", description: "Create ModuleCategory" },
-          { id: "LearnCategories.Update", name: "LearnCategories.Update", description: "Update ModuleCategory" },
-          { id: "LearnCategories.Delete", name: "LearnCategories.Delete", description: "Delete ModuleCategory" }
+          getPermissionByName(PERMISSIONS.Categories.Create),
+          getPermissionByName(PERMISSIONS.Categories.Update),
+          getPermissionByName(PERMISSIONS.Categories.Delete)
         ]
       },
       {
         group: "ModuleNode",
         permissions: [
-          { id: "LearnNodes.Create", name: "LearnNodes.Create", description: "Create ModuleNode" },
-          { id: "LearnNodes.Update", name: "LearnNodes.Update", description: "Update ModuleNode" },
-          { id: "LearnNodes.Delete", name: "LearnNodes.Delete", description: "Delete ModuleNode" }
+          getPermissionByName(PERMISSIONS.LearnNodes.Create),
+          getPermissionByName(PERMISSIONS.LearnNodes.Update),
+          getPermissionByName(PERMISSIONS.LearnNodes.Delete)
         ]
       },
       {
         group: "ModuleLesson",
         permissions: [
-          { id: "LearnLessons.Create", name: "LearnLessons.Create", description: "Create ModuleLesson" },
-          { id: "LearnLessons.Update", name: "LearnLessons.Update", description: "Update ModuleLesson" },
-          { id: "LearnLessons.Delete", name: "LearnLessons.Delete", description: "Delete ModuleLesson" }
+          getPermissionByName(PERMISSIONS.Lessons.Create),
+          getPermissionByName(PERMISSIONS.Lessons.Update),
+          getPermissionByName(PERMISSIONS.Lessons.Delete)
         ]
       },
       {
         group: "ChallengeTag",
         permissions: [
-          { id: "ChallengeTag.Create", name: "ChallengeTag.Create", description: "Create ChallengeTag" },
-          { id: "ChallengeTag.Update", name: "ChallengeTag.Update", description: "Update ChallengeTag" },
-          { id: "ChallengeTag.Delete", name: "ChallengeTag.Delete", description: "Delete ChallengeTag" }
+          getPermissionByName(PERMISSIONS.ChallengeTag.Create),
+          getPermissionByName(PERMISSIONS.ChallengeTag.Update),
+          getPermissionByName(PERMISSIONS.ChallengeTag.Delete)
         ]
       },
       {
         group: "ChallengeCategory",
         permissions: [
-          { id: "ChallengeCategory.Create", name: "ChallengeCategory.Create", description: "Create ChallengeCategory" },
-          { id: "ChallengeCategory.Update", name: "ChallengeCategory.Update", description: "Update ChallengeCategory" },
-          { id: "ChallengeCategory.Delete", name: "ChallengeCategory.Delete", description: "Delete ChallengeCategory" }
+          getPermissionByName(PERMISSIONS.ChallengeCategory.Create),
+          getPermissionByName(PERMISSIONS.ChallengeCategory.Update),
+          getPermissionByName(PERMISSIONS.ChallengeCategory.Delete)
         ]
       },
       {
         group: "ChallengeNode",
         permissions: [
-          { id: "ChallengeNode.Create", name: "ChallengeNode.Create", description: "Create Challenge Folder" },
-          { id: "ChallengeNode.Update", name: "ChallengeNode.Update", description: "Update Challenge Folder" },
-          { id: "ChallengeNode.Delete", name: "ChallengeNode.Delete", description: "Delete Challenge Folder" }
+          getPermissionByName(PERMISSIONS.ChallengeNode.Create),
+          getPermissionByName(PERMISSIONS.ChallengeNode.Update),
+          getPermissionByName(PERMISSIONS.ChallengeNode.Delete)
         ]
       },
       {
         group: "ChallengeProblem",
         permissions: [
-          { id: "ChallengeProblem.Create", name: "ChallengeProblem.Create", description: "Create Challenge" },
-          { id: "ChallengeProblem.Update", name: "ChallengeProblem.Update", description: "Update Challenge" },
-          { id: "ChallengeProblem.Delete", name: "ChallengeProblem.Delete", description: "Delete Challenge" }
+          getPermissionByName(PERMISSIONS.ChallengeProblem.Create),
+          getPermissionByName(PERMISSIONS.ChallengeProblem.Update),
+          getPermissionByName(PERMISSIONS.ChallengeProblem.Delete)
         ]
       },
       {
         group: "Roles",
         permissions: [
-          { id: "Roles.Create", name: "Roles.Create", description: "Create Role" },
-          { id: "Roles.Update", name: "Roles.Update", description: "Update Role" },
-          { id: "Roles.Delete", name: "Roles.Delete", description: "Delete Role" },
-          { id: "Roles.AddPermission", name: "Roles.AddPermission", description: "Add Permission to Role" },
-          { id: "Roles.RemovePermission", name: "Roles.RemovePermission", description: "Remove Permission from Role" }
+          getPermissionByName(PERMISSIONS.Roles.Create),
+          getPermissionByName(PERMISSIONS.Roles.Update),
+          getPermissionByName(PERMISSIONS.Roles.Delete),
+          getPermissionByName(PERMISSIONS.Roles.AddPermission),
+          getPermissionByName(PERMISSIONS.Roles.RemovePermission)
         ]
       },
       {
         group: "Users",
         permissions: [
-          { id: "Users.AddRole", name: "Users.AddRole", description: "Add Role to User" },
-          { id: "Users.RemoveRole", name: "Users.RemoveRole", description: "Remove Role from User" },
-          { id: "Users.AddPermission", name: "Users.AddPermission", description: "Add Permission to User" },
-          { id: "Users.RemovePermission", name: "Users.RemovePermission", description: "Remove Permission from User" }
+          getPermissionByName(PERMISSIONS.Users.AddRole),
+          getPermissionByName(PERMISSIONS.Users.RemoveRole),
+          getPermissionByName(PERMISSIONS.Users.AddPermission),
+          getPermissionByName(PERMISSIONS.Users.RemovePermission)
         ]
       }
     ];
     
     // Map the real permissions from the server over our organized structure
     const result = {};
-    
+
     allPermissions.forEach(group => {
       result[group.group] = group.permissions.map(permission => {
         // Find the actual permission from our current permissions list
-        const actualPermission = currentPermissions.find(p => p.name === permission.name) || 
-                                currentPermissions.find(p => p.id === permission.name);
-        
+        const actualPermission = currentPermissions.find(p => p.id === permission.id);
+
         return {
           ...permission,
-          id: actualPermission?.id || permission.id,
-          description: actualPermission?.description || permission.description,
-          // If the permission exists in currentPermissions, mark it as assigned
           assigned: !!actualPermission
         };
       });
@@ -213,66 +225,52 @@ const PermissionManagement = () => {
   };
   
   // Check if a permission is assigned
-  const isPermissionAssigned = (permissionName) => {
-    return currentPermissions.some(p => p.name === permissionName) ||
-           pendingChanges[permissionName] === true;
+  const isPermissionAssigned = (permissionId) => {
+    return currentPermissions.some(p => p.id === permissionId) ||
+           pendingChanges[permissionId] === true;
   };
   
   // Handle permission checkbox change
-  const handlePermissionChange = (permissionName, checked) => {
+  const handlePermissionChange = (permissionId, checked) => {
+    console.log('Permission change:', permissionId, checked);
     setPendingChanges(prev => ({
       ...prev,
-      [permissionName]: checked
+      [permissionId]: checked
     }));
   };
   
   // Save changes
-  const handleSaveChanges = async () => {
-    if (!object) return;
-    
-    for (const [permissionName, isChecked] of Object.entries(pendingChanges)) {
-      // Find the permission ID from name
-      const permission = currentPermissions.find(p => p.name === permissionName);
-      const permissionId = permission?.id;
-      
-      if (!permissionId) continue;
-      
-      if (isRole) {
-        if (isChecked) {
-          await dispatch(addPermissionToRole({ 
-            roleId: object.id, 
-            permissionId 
-          }));
-        } else {
-          await dispatch(removePermissionFromRole({ 
-            roleId: object.id, 
-            permissionId 
-          }));
-        }
-      } else {
-        if (isChecked) {
-          await dispatch(addPermissionToUser({ 
-            userId: object.id, 
-            permissionId 
-          }));
-        } else {
-          await dispatch(removePermissionFromUser({ 
-            userId: object.id, 
-            permissionId 
-          }));
-        }
-      }
+const handleSaveChanges = async () => {
+  if (!object) return;
+
+  const currentIds = new Set(currentPermissions.map(p => p.id));
+
+  const promises = [];
+
+  for (const [permissionId, isChecked] of Object.entries(pendingChanges)) {
+    const hasPermission = currentIds.has(permissionId);
+
+    if (isChecked && !hasPermission) {
+      const action = isRole ? addPermissionToRole : addPermissionToUser;
+      promises.push(dispatch(action({ 
+        [isRole ? 'roleId' : 'userId']: object.id, 
+        permissionId 
+      })));
+    } else if (!isChecked && hasPermission) {
+      const action = isRole ? removePermissionFromRole : removePermissionFromUser;
+      promises.push(dispatch(action({ 
+        [isRole ? 'roleId' : 'userId']: object.id, 
+        permissionId 
+      })));
     }
-    
-    // Refresh permissions
-    if (isRole) {
-      dispatch(fetchRolePermissions(object.id));
-    } else {
-      dispatch(fetchUserPermissions(object.id));
-    }
-    
-    setPendingChanges({});
-  };
+  }
+
+  await Promise.all(promises);
+  const refresh = isRole ? fetchRolePermissions : fetchUserPermissions;
+  dispatch(refresh(object.id));
+
+  setPendingChanges({});
+};
   
   // Reset changes
   const handleResetChanges = () => {
@@ -280,8 +278,8 @@ const PermissionManagement = () => {
   };
   
   // Update permission description
-  const handleUpdatePermissionDescription = async (permissionId, description) => {
-    await dispatch(updatePermissionDescription({ permissionId, description }));
+  const handleUpdatePermissionDescription = async (editingPermission) => {
+    await dispatch(updatePermissionDescription({ editingPermission }));
     setEditingPermission(null);
   };
 

@@ -9,7 +9,7 @@ const EditPermissionDialog = ({ editingPermission, setEditingPermission, handleU
         <h3 className="font-bold text-lg">Edit Permission Description</h3>
         <div className="py-4">
           <div className="form-control">
-            <label className="label">
+            <label className="label block">
               <span className="label-text">Permission Name</span>
             </label>
             <input 
@@ -20,7 +20,7 @@ const EditPermissionDialog = ({ editingPermission, setEditingPermission, handleU
             />
           </div>
           <div className="form-control mt-4">
-            <label className="label">
+            <label className="label block">
               <span className="label-text">Description</span>
             </label>
             <input 
@@ -44,8 +44,7 @@ const EditPermissionDialog = ({ editingPermission, setEditingPermission, handleU
           <button 
             className="btn btn-primary"
             onClick={() => handleUpdatePermissionDescription(
-              editingPermission.id, 
-              editingPermission.newDescription
+              editingPermission
             )}
             disabled={!editingPermission.newDescription || editingPermission.newDescription === editingPermission.description}
           >

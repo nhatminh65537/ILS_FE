@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import RoleList from './RoleList';
 
 const Sidebar = ({ 
   isRole, 
@@ -11,7 +12,6 @@ const Sidebar = ({
   handleUserSearch, 
   handleUserSelect 
 }) => {
-  const [roleSearchTerm, setRoleSearchTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState('username');
 
@@ -36,32 +36,11 @@ const Sidebar = ({
       </div>
       
       {isRole ? (
-        <div className="mb-4">
-          <h2 className="text-lg font-bold mb-2">Roles</h2>
-          <input
-            type="text"
-            className="input input-bordered w-full mb-2"
-            placeholder="Search roles..."
-            value={roleSearchTerm}
-            onChange={e => setRoleSearchTerm(e.target.value)}
-          />
-          <div className="max-h-60 overflow-y-auto">
-            {listRoles
-              .filter(role => role.name.toLowerCase().includes(roleSearchTerm.toLowerCase()))
-              .map(role => (
-                <div 
-                  key={role.id} 
-                  className={`p-2 mb-1 rounded cursor-pointer hover:bg-base-200 ${
-                    object?.id === role.id ? 'bg-base-300' : ''
-                  }`}
-                  onClick={() => handleRoleSelect(role)}
-                >
-                  {role.name}
-                </div>
-              ))
-            }
-          </div>
-        </div>
+        <RoleList 
+          roles={listRoles}
+          onSelectRole={handleRoleSelect}
+          selectedRoleId={object?.id}
+        />
       ) : (
         <div className="mb-4">
           <h2 className="text-lg font-bold mb-2">Find User</h2>
@@ -92,7 +71,7 @@ const Sidebar = ({
           
           {currentFetchedUser && !currentFetchedUser.error && (
             <div className="mt-3 p-3 border rounded">
-              <div className="font-bold">{currentFetchedUser.username}</div>
+              <div className="font-bold">{currentFetchedUser.userName}</div>
               <div className="text-sm text-base-content/70">{currentFetchedUser.email}</div>
               <button
                 className="btn btn-sm btn-outline mt-2 w-full"
@@ -114,7 +93,7 @@ const Sidebar = ({
       {object && (
         <div className="mt-4 p-3 border rounded bg-base-200">
           <h3 className="font-bold">{isRole ? 'Selected Role' : 'Selected User'}</h3>
-          <div>{isRole ? object.name : object.username}</div>
+          <div>{isRole ? object.name : object.userName}</div>
           {!isRole && <div className="text-sm">{object.email}</div>}
         </div>
       )}

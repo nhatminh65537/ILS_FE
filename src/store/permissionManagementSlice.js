@@ -2,9 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { permissionsAPI } from '../apis/permissions';
 import { usersAPI } from '../apis/users';
 import { rolesAPI } from '../apis/roles';
+import { all } from 'axios';
 
 // Initial state
 const initialState = {
+  listPermissions: [], // list of all available permissions
   currentPermissions: [], // list of permission objects with {id, name, description}
   isRole: true, // true if working with role, false if working with user
   object: null, // current role or user object
@@ -14,6 +16,17 @@ const initialState = {
   loading: false,
   error: null
 };
+
+export const fetchAllPermissions = createAsyncThunk(
+  'permissionManagement/fetchAllPermissions',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await permissionsAPI.getAll();
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to fetch permissions');
+    }
+  }
+);
 
 // Thunks
 export const fetchRolePermissions = createAsyncThunk(
@@ -125,9 +138,10 @@ export const removePermissionFromUser = createAsyncThunk(
 
 export const addRoleToUser = createAsyncThunk(
   'permissionManagement/addRoleToUser',
-  async ({ userId, roleId }, { rejectWithValue }) => {
+  async ({ userId, roleId }, { rejectWithValue, dispatch }) => {
     try {
       await usersAPI.addRole(userId, roleId);
+      await dispatch(fetchUserPermissions(userId));
       return roleId;
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to add role');
@@ -137,9 +151,10 @@ export const addRoleToUser = createAsyncThunk(
 
 export const removeRoleFromUser = createAsyncThunk(
   'permissionManagement/removeRoleFromUser',
-  async ({ userId, roleId }, { rejectWithValue }) => {
+  async ({ userId, roleId }, { rejectWithValue, dispatch }) => {
     try {
       await usersAPI.removeRole(userId, roleId);
+      await dispatch(fetchUserPermissions(userId));
       return roleId;
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to remove role');
@@ -149,12 +164,66 @@ export const removeRoleFromUser = createAsyncThunk(
 
 export const updatePermissionDescription = createAsyncThunk(
   'permissionManagement/updatePermissionDescription',
-  async ({ permissionId, description }, { rejectWithValue }) => {
+  async ({ editingPermission }, { rejectWithValue }) => {
     try {
-      await permissionsAPI.update(permissionId, { description });
-      return { id: permissionId, description };
+      await permissionsAPI.update(editingPermission.id, { 
+        id: editingPermission.id,
+        name: editingPermission.name,
+        description: editingPermission.newDescription 
+      });
+      return { id: editingPermission.id, description: editingPermission.newDescription };
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to update permission');
+    }
+  }
+);
+
+// Add these new role management thunks after the existing thunks
+export const createRole = createAsyncThunk(
+  'permissionManagement/createRole',
+  async (roleData, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await rolesAPI.create(roleData);
+      // Refresh the roles list after creating a new role
+      dispatch(fetchAllRoles());
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to create role');
+    }
+  }
+);
+
+export const updateRole = createAsyncThunk(
+  'permissionManagement/updateRole',
+  async ({ roleId, roleData }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await rolesAPI.update(roleId, roleData);
+      // Refresh the roles list after updating
+      dispatch(fetchAllRoles());
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to update role');
+    }
+  }
+);
+
+export const deleteRole = createAsyncThunk(
+  'permissionManagement/deleteRole',
+  async (roleId, { rejectWithValue, dispatch, getState }) => {
+    try {
+      await rolesAPI.delete(roleId);
+      // Refresh the roles list after deleting
+      dispatch(fetchAllRoles());
+      
+      // If the deleted role was selected, clear it
+      const { object, isRole } = getState().permissionManagement;
+      if (isRole && object && object.id === roleId) {
+        dispatch(setObject(null));
+      }
+      
+      return roleId;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to delete role');
     }
   }
 );
@@ -293,10 +362,65 @@ const permissionManagementSlice = createSlice({
       // Handle permission description update
       .addCase(updatePermissionDescription.fulfilled, (state, action) => {
         const { id, description } = action.payload;
-        const permission = state.currentPermissions.find(p => p.id === id);
+        const permission = state.listPermissions.find(p => p.id === id);
         if (permission) {
           permission.description = description;
         }
+      })
+      
+      // Handle createRole
+      .addCase(createRole.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createRole.fulfilled, (state) => {
+        state.loading = false;
+        // The roles list will be refreshed by fetchAllRoles
+      })
+      .addCase(createRole.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Handle updateRole
+      .addCase(updateRole.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateRole.fulfilled, (state) => {
+        state.loading = false;
+        // The roles list will be refreshed by fetchAllRoles
+      })
+      .addCase(updateRole.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Handle deleteRole
+      .addCase(deleteRole.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteRole.fulfilled, (state) => {
+        state.loading = false;
+        // The roles list will be refreshed by fetchAllRoles
+      })
+      .addCase(deleteRole.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Handle fetchAllPermissions
+      .addCase(fetchAllPermissions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllPermissions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.listPermissions = action.payload;
+      })
+      .addCase(fetchAllPermissions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   }
 });

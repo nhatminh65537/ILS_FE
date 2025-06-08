@@ -24,7 +24,7 @@ const loginUser = createAsyncThunk(
                       
             return responseData; 
         } catch (error) {
-            return rejectWithValue("error"); 
+            return rejectWithValue(error.message || "error"); 
         }
     }
 );

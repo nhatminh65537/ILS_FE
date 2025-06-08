@@ -38,6 +38,7 @@ const LearnEdit = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   
   useEffect(() => {
+    clearContentEditState();
     dispatch(fetchModuleContent(moduleId));
   }, [dispatch, moduleId]);
 

@@ -11,9 +11,10 @@ const Login = () => {
   const loading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.auth.error);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({username, password}));
+    await dispatch(loginUser({username, password}));
+    
   }
 
   return (
@@ -21,7 +22,11 @@ const Login = () => {
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-center">Sign in ILSNX</h2>
-          
+
+          {error && <div className="alert alert-error shadow-lg mt-4">
+            <div>{error}</div>
+          </div>}
+
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="form-control">
               <label className="label">

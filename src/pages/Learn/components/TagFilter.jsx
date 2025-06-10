@@ -41,6 +41,11 @@ const TagFilter = ({
         disabled={disabled}
       />
       <div className="max-h-40 overflow-y-auto p-2 border rounded-lg">
+        {filteredTags.length === 0 && (
+          <div className="text-base-content/70">
+            No tags found
+          </div>
+        )}
         {filteredTags.map(tag => (
           <div key={tag.id} className="form-control py-1">
             <label className="label cursor-pointer flex justify-between">

@@ -45,10 +45,10 @@ export const fetchLearnTree = createAsyncThunk(
 
 export const fetchLessonContent = createAsyncThunk(
   'contentEdit/fetchLessonContent',
-  async (lessonId, { rejectWithValue }) => {
+  async ({lessonId, isEditMode}, { rejectWithValue }) => {
     try {
       const response = await learnLessonsAPI.getById(lessonId);
-      return response;
+      return { response, isEditMode };
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch lesson content');
     }
@@ -112,6 +112,9 @@ export const saveLessonContent = createAsyncThunk(
     try {
       if (changes.content) {
         changes.content = changes.content.replace(/\\\\/g, '\\');
+                                        //  .replace(/\\_/g, '_')
+                                        //  .replace(/\\\[/g, '[')
+                                        //  .replace(/\\\]/g, ']');
       }
       const state = getState();
       const { lessons, contentTree } = state.contentEdit;
@@ -126,7 +129,7 @@ export const saveLessonContent = createAsyncThunk(
         typeId: lesson.lessonType.id, 
         ...changes
       });
-      await dispatch(fetchLessonContent(lesson.id));
+      await dispatch(fetchLessonContent({ lessonId: lesson.id, isEditMode: true }));
       await dispatch(fetchModuleContent(getState().contentEdit.currentModule.id)); // Refresh module content after saving
       return response;
     } catch (error) {
@@ -342,8 +345,17 @@ const contentEditSlice = createSlice({
       })
       .addCase(fetchLessonContent.fulfilled, (state, action) => {
         state.loading = false;
-        action.payload.content = action.payload.content.replace(/\\/g, '\\\\'); // Fix double backslashes
-        state.lessons[action.payload.id] = action.payload;
+
+        const lesson = action.payload.response;
+        
+        if (!action.payload.isEditMode) {
+          lesson.content = lesson.content.replace(/\\_/g, '_');
+          lesson.content = lesson.content.replace(/\\\[/g, '[');
+          lesson.content = lesson.content.replace(/\\\]/g, ']');
+        } else {
+          lesson.content = lesson.content.replace(/\\(?![\[\]_])/g, '\\\\');
+        }
+        state.lessons[lesson.id] = lesson;
       })
       .addCase(fetchLessonContent.rejected, (state, action) => {
         state.loading = false;

@@ -73,6 +73,7 @@ import {
 } from 'ckeditor5';
 
 import 'ckeditor5/ckeditor5.css';
+import Frame from 'react-frame-component';
 
 // import './App.css';
 
@@ -302,6 +303,9 @@ export default function MyEditor( { id, data, onChange }) {
 				placeholder: 'Type or paste your content here!',
 				table: {
 					contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
+				},
+			    simpleUpload: {
+					uploadUrl: 'http://cdn.rougitsune.top/upload-image',
 				}
 			}
 		};
@@ -315,6 +319,5 @@ export default function MyEditor( { id, data, onChange }) {
                     <CKEditor id={id} data={data} onChange={onChange} editor={ClassicEditor} config={editorConfig} />}</div>
 				</div>
 			</div>
-
 	);
 }

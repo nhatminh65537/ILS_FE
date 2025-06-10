@@ -20,7 +20,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
   const dispatch = useDispatch();
   useEffect(() => {
     if (!lessons[lessonId]) {
-      dispatch(fetchLessonContent(lessonId));  // Fetch lesson data if not already present
+      dispatch(fetchLessonContent({lessonId, isEditMode: true }));  // Fetch lesson data if not already present
     }
   }, [lessonId, lessons, dispatch]);
 
@@ -33,6 +33,7 @@ const LessonTab = ({ nodeId, onChange, unsavedChanges = {}, onSave, onDelete }) 
   
   const handleEditorChange = (event, editor) => {
     const data = editor.getData();
+    console.log("Editor data changed:", data);
     if (data === lessonData.content) {
       return;  
     }

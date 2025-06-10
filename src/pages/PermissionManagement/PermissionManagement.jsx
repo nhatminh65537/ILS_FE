@@ -226,8 +226,10 @@ const PermissionManagement = () => {
   
   // Check if a permission is assigned
   const isPermissionAssigned = (permissionId) => {
-    return currentPermissions.some(p => p.id === permissionId) ||
-           pendingChanges[permissionId] === true;
+    if (pendingChanges[permissionId] !== undefined) {
+      return pendingChanges[permissionId];
+    }
+    return currentPermissions.some(p => p.id === permissionId);
   };
   
   // Handle permission checkbox change
@@ -248,19 +250,20 @@ const handleSaveChanges = async () => {
   const promises = [];
 
   for (const [permissionId, isChecked] of Object.entries(pendingChanges)) {
-    const hasPermission = currentIds.has(permissionId);
+    const id = permissionId * 1;
+    const hasPermission = currentIds.has(id);
 
     if (isChecked && !hasPermission) {
       const action = isRole ? addPermissionToRole : addPermissionToUser;
       promises.push(dispatch(action({ 
         [isRole ? 'roleId' : 'userId']: object.id, 
-        permissionId 
+        permissionId: id
       })));
     } else if (!isChecked && hasPermission) {
       const action = isRole ? removePermissionFromRole : removePermissionFromUser;
       promises.push(dispatch(action({ 
         [isRole ? 'roleId' : 'userId']: object.id, 
-        permissionId 
+        permissionId: id
       })));
     }
   }

@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import Frame from 'react-frame-component';
 import 'katex/dist/katex.min.css'; // Import KaTeX CSS for math rendering
+import link from 'daisyui/components/link';
 
 const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
   const [readTime, setReadTime] = useState(0);
@@ -41,6 +43,7 @@ const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
   }
   
   return (
+    
     <div className="relative">
       <h1 className="text-2xl font-bold mb-4">{lesson.title}</h1>
       
@@ -69,16 +72,30 @@ const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
           </div>
         )}
       </div>
+
+      <Frame
+        style={{ width: '100%', height: '66vh', border: 'none' }}
+        head={
+          <link
+            rel="stylesheet"
+            href="../../../../node_modules/katex/dist/katex.min.css"
+          ></link>
+        }
+      >
+        <div>
+        
+          <ReactMarkdown
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[[rehypeKatex]]}
+          >{lesson.content || 'No content available for this lesson.'}</ReactMarkdown>
+        
+        </div>
+
+      </Frame>
       
-      <div className="prose prose-lg max-w-none">
-        <ReactMarkdown
-          remarkPlugins={[remarkMath]}
-          rehypePlugins={[[rehypeKatex, { strict: false }]]}
-        >{lesson.content.replace(/\\\\/g, '\\') || 'No content available for this lesson.'}</ReactMarkdown>
-      </div>
-      
+
       <div className="mt-8 border-t pt-4 flex justify-end">
-        <button 
+        <button
           className={`btn ${isCompleted ? 'btn-success' : isFinishable ? 'btn-primary' : 'btn-disabled'}`}
           onClick={onFinish}
           disabled={!isFinishable || isCompleted}

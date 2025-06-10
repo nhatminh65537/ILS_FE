@@ -50,7 +50,7 @@ const LessonView = () => {
       if (nodeId) {
         setActiveNodeId(nodeId);
         if (!lessons[lessonId]) {
-          dispatch(fetchLessonContent(Number(lessonId)));
+          dispatch(fetchLessonContent({ lessonId: Number(lessonId), isEditMode: false }));
         }
       }
     }
@@ -59,7 +59,7 @@ const LessonView = () => {
   const handleLessonSelect = (nodeId, lessonId) => {
     setActiveNodeId(nodeId);
     if (lessonId && !lessons[lessonId]) {
-      dispatch(fetchLessonContent(lessonId));
+      dispatch(fetchLessonContent({ lessonId: Number(lessonId), isEditMode: false }));
     }
     navigate(`/learn/${moduleId}/lessons/${lessonId}`);
   };

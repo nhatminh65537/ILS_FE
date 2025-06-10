@@ -5,7 +5,6 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import Frame from 'react-frame-component';
 import 'katex/dist/katex.min.css'; // Import KaTeX CSS for math rendering
-import link from 'daisyui/components/link';
 
 const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
   const [readTime, setReadTime] = useState(0);
@@ -78,7 +77,7 @@ const LessonContent = ({ lesson, node, onFinish, isCompleted }) => {
         head={
           <link
             rel="stylesheet"
-            href="../../../../node_modules/katex/dist/katex.min.css"
+            href="/katex.min.css"
           ></link>
         }
       >

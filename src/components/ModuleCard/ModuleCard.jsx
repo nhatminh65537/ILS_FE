@@ -14,7 +14,7 @@ const ModuleCard = ({ module }) => {
     const canUpdate = useSelector((state) =>
         hasPermission(state, PERMISSIONS.Modules.Update)
     );
-    const notPublished = false && module.lifecycleState.name !== "Published";
+    const notPublished = module.lifecycleState.name !== "Published";
 
     // Get module progress from Redux store
     const moduleProgress = useSelector((state) => 
